@@ -1,5 +1,9 @@
 # microservice
 
+Menyeiapkan seluruh file yang dibutuhkan, saya menyimpannya di /d/tugas3/
+
+## Langkah 1: Start Minikube
+
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes$ minikube start
 😄  minikube v1.31.2 on Microsoft Windows 11 Home Single Language 10.0.22621.2283 Build 22621.2283
@@ -24,10 +28,14 @@ MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes$ minikube start
 🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
 ```
 
+## Langkah 2: Dapatkan IP Minikube
+
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes$ minikube ip
 192.168.49.2
 ```
+
+## Langkah 3: Unduh Istio
 
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes$ curl -L https://github.com/istio/istio/releases/download/1.17.1/istio-1.17.1-win.zip -o istio-1.17.1-win.zip
@@ -37,6 +45,8 @@ MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes$ curl -L https://github.com/istio/is
 100 26.7M  100 26.7M    0     0  3565k      0  0:00:07  0:00:07 --:--:-- 3652k
 
 ```
+
+### Langkah 4: Extrak
 
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes$ unzip istio-1.17.1-win.zip
@@ -471,14 +481,19 @@ Archive:  istio-1.17.1-win.zip
   inflating: istio-1.17.1/tools/istioctl.bash
 ```
 
+## Langkah 5: Masuk ke folder
+
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes$ cd istio-1.17.1/
 ```
+
+## Langkah 6: Set PATH dan Install Istio
 
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/istio-1.17.1$ export PATH=$PWD/bin:$PATH
 ```
 
+## Langkah 7: Menginstal inti Istio.
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/istio-1.17.1$ istioctl install --set profile=demo -y
 ✔ Istio core installed
@@ -492,15 +507,21 @@ Thank you for installing Istio 1.17.  Please take a few minutes to tell us about
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/istio-1.17.1
 ```
 
+## Langkah 8: Label Default Namespace untuk Injection
+
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/istio-1.17.1$ kubectl label namespace default istio-injection=enabled
 namespace/default labeled
 ```
 
+## Langkah 9: Install RabbitMQ dengan Helm
+
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/istio-1.17.1$ helm repo add bitnami https://charts.bitnami.com/bitnami
 "bitnami" has been added to your repositories
 ```
+
+## Langkah 10: Update repo
 
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/istio-1.17.1$ helm repo update
@@ -509,6 +530,7 @@ Hang tight while we grab the latest from your chart repositories...
 Update Complete. ⎈Happy Helming!⎈
 ```
 
+## Langkah 11: Install
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/istio-1.17.1$ helm install my-rabbitmq bitnami/rabbitmq
 NAME: my-rabbitmq
@@ -546,22 +568,30 @@ To Access the RabbitMQ Management interface:
     kubectl port-forward --namespace default svc/my-rabbitmq 15672:15672
 ```
 
+## Langkah 12: Masuk folder shipping-service
+
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/istio-1.17.1$ cd ../shipping-service
 ```
 
+## Langkah 13: Konfigurasi Konfigurasi Shipping Service
+
 ```
-MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$ kubectl apply -f .
+MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/shipping-service$ kubectl apply -f .
 deployment.apps/order-service-deploy created
 gateway.networking.istio.io/order-service-gw created
 service/order-service-svc created
 virtualservice.networking.istio.io/order-service-vs created
 ```
+
+## Langkah 14: Masuk folder order-service
 
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/shipping-service$ cd ../order-service
 ```
 
+## Langkah 15: Konfigurasi Konfigurasi Order Service
+
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$ kubectl apply -f .
 deployment.apps/order-service-deploy created
@@ -569,6 +599,8 @@ gateway.networking.istio.io/order-service-gw created
 service/order-service-svc created
 virtualservice.networking.istio.io/order-service-vs created
 ```
+
+## Langkah 16: Port Forward ke RabbitMQ Management Interface
 
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$ kubectl port-forward --namespace default svc/my-rabbitmq 15672:15672
@@ -579,17 +611,24 @@ Handling connection for 15672
 Handling connection for 15672
 ```
 
+## Langkah 17: Mendapatkan password
+
 buka terminal baru
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$ echo "$(kubectl get secret --namespace default my-rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 -d)"
 2lUdRqdqTLMOBVmV
 ```
+Anda kemudian mendapatkan password dari secret RabbitMQ.
 
 copy 2lUdRqdqTLMOBVmV
+
 buka: http://127.0.0.1:15672
 
-___username:__ user
+__username:__ user
+
 __password:__ 2lUdRqdqTLMOBVmV
+
+## Langkah 18: Port Forward ke Istio Ingress Gateway
 
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$ kubectl port-forward svc/istio-ingressgateway -n istio-system 80:80
