@@ -628,17 +628,58 @@ __username:__ user
 
 __password:__ 2lUdRqdqTLMOBVmV
 
+![](_img_/1.png)
+
+![](_img_/2.png)
+
 ## Langkah 18: Port Forward ke Istio Ingress Gateway
 
 ```
-MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$ kubectl port-forward svc/istio-ingressgateway -n istio-system 80:80
-Forwarding from 127.0.0.1:80 -> 8080
-Forwarding from [::1]:80 -> 8080
+MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$ kubectl port-forward service/order-service-svc 80:3000
+Forwarding from 127.0.0.1:80 -> 3000
+Forwarding from [::1]:80 -> 3000
 Handling connection for 80
 Handling connection for 80
 Handling connection for 80
 Handling connection for 80
 ```
 
-buka: http://127.0.0.1:80/order
+![](_img_/3.png)
 
+```
+MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$
+for i in {1..10}; do
+  curl -X POST -H "Content-Type: application/json" -d '{
+    "order": {
+        "book_name": "book_name_'$i'",
+        "author": "author_'$i'",
+        "buyer": "buyer_'$i'",
+        "shipping_address": "shipping_address_'$i'"
+    }
+  }' http://localhost:80/order
+done
+{"book_name":"book_name_1","author":"author_1","buyer":"buyer_1","shipping_address":"shipping_address_1"}{"book_name":"book_name_2","author":"author_2","buyer":"buyer_2","shipping_address":"shipping_address_2"}{"book_name":"book_name_3","author":"author_3","buyer":"buyer_3","shipping_address":"shipping_address_3"}{"book_name":"book_name_4","author":"author_4","buyer":"buyer_4","shipping_address":"shipping_address_4"}{"book_name":"book_name_5","author":"author_5","buyer":"buyer_5","shipping_address":"shipping_address_5"}{"book_name":"book_name_6","author":"author_6","buyer":"buyer_6","shipping_address":"shipping_address_6"}{"book_name":"book_name_7","author":"author_7","buyer":"buyer_7","shipping_address":"shipping_address_7"}{"book_name":"book_name_8","author":"author_8","buyer":"buyer_8","shipping_address":"shipping_address_8"}{"book_name":"book_name_9","author":"author_9","buyer":"buyer_9","shipping_address":"shipping_address_9"}{"book_name":"book_name_10","author":"author_10","buyer":"buyer_10","shipping_address":"shipping_address_10"}
+```
+
+![](_img_/4.png)
+
+![](_img_/5.png)
+
+```
+MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$ kubectl logs $(kubectl get pods -l app=order-service -o jsonpath="{.items[0].metadata.name}")
+wait-for-it.sh: waiting 30 seconds for my-rabbitmq:5672
+wait-for-it.sh: my-rabbitmq:5672 is available after 0 seconds
+Server running at 3000
+Connected to the queue!
+Order succesfully created!
+Order succesfully created!
+Order succesfully created!
+Order succesfully created!
+Order succesfully created!
+Order succesfully created!
+Order succesfully created!
+Order succesfully created!
+Order succesfully created!
+Order succesfully created!
+```
+![](_img_/6.png)
