@@ -646,6 +646,8 @@ Handling connection for 80
 
 ![](_img_/3.png)
 
+## Langkah 19: Untuk menguji coba order-service
+
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$
 for i in {1..10}; do
