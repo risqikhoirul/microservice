@@ -632,7 +632,7 @@ __password:__ 2lUdRqdqTLMOBVmV
 
 ![](_img_/2.png)
 
-## Langkah 18: Port Forward ke Istio Ingress Gateway
+## Langkah 18: Port Forward ke orser-serve
 
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$ kubectl port-forward service/order-service-svc 80:3000
