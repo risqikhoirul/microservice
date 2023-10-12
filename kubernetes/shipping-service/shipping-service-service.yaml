@@ -1,9 +1,0 @@
-apiVersion: v1 # Menentukan versi API yang digunakan (v1 dalam kasus ini).
-kind: Service # Mendefinisikan bahwa YAML ini menggambarkan sebuah Layanan Kubernetes.
-metadata:
-  name: shipping-service-svc # Menentukan nama dari Layanan ini.
-spec:
-  selector:
-    app: shipping-service # Mendefinisikan selector untuk mengidentifikasi pod yang ditargetkan oleh layanan ini.
-  ports:
-    - port: 3001 # Menentukan nomor port (3001 dalam kasus ini).
