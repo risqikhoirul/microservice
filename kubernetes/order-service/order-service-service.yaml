@@ -1,0 +1,9 @@
+apiVersion: v1 # Menentukan versi API yang digunakan (v1 dalam kasus ini).
+kind: Service # Mendefinisikan jenis sumber daya Kubernetes sebagai Layanan.
+metadata:
+  name: order-service-svc # Nama yang diberikan untuk sumber daya order-service-svc ini.
+spec:
+  selector:
+    app: order-service # Memilih pod yang diberi label 'app: order-service'.
+  ports:
+    - port: 3000 # Mengekspos Layanan ini pada port 3000 menggunakan protokol TCP.

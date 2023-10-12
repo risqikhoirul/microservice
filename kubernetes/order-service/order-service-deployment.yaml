@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-deploy # Nama dari sumber daya Deployment
+spec:
+  replicas: 1 # Menentukan jumlah replika yang diinginkan untuk Deployment
+  selector:
+    matchLabels:
+      app: order-service # Memilih Pod berdasarkan label 'app' dengan nilai order-service
+  template:
+    metadata:
+      labels:
+        app: order-service # Memberi label pada Pod yang dibuat oleh templat ini dengan label app dan nilai order-service
+    spec:
+      containers:
+        - name: order-service # Nama dari kontainer di dalam Pod
+          image: ghcr.io/risqikhoirul/order-service:latest # Gambar Docker yang digunakan untuk kontainer
+          ports:
+            - containerPort: 3000 # Port di mana kontainer mendengarkan lalu lintas masuk
+          env:
+            - name: AMQP_PASSWORD # Nama variabel lingkungan untuk kata sandi RabbitMQ
+              valueFrom:
+                secretKeyRef:
+                  name: my-rabbitmq # Nama Secret yang berisi kata sandi RabbitMQ
+                  key: rabbitmq-password # Kunci di dalam Secret untuk mengambil kata sandi RabbitMQ
+            - name: AMQP_URL # Nama variabel lingkungan untuk URL RabbitMQ
+              value: "amqp://user:$(AMQP_PASSWORD)@my-rabbitmq:5672" # Nilai untuk URL RabbitMQ, termasuk nama pengguna, kata sandi, dan host
