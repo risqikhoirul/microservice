@@ -646,6 +646,55 @@ Handling connection for 80
 
 ![](_img_/3.png)
 
+## Langkah 19: Isolate
+
+```
+MSI GAMING@MSI MINGW64 /d/tugas3.1/istio-1.17.1$ kubectl apply -f samples/addons
+serviceaccount/grafana created
+configmap/grafana created
+service/grafana created
+deployment.apps/grafana created
+configmap/istio-grafana-dashboards created
+configmap/istio-services-grafana-dashboards created
+deployment.apps/jaeger created
+service/tracing created
+service/zipkin created
+service/jaeger-collector created
+serviceaccount/kiali created
+configmap/kiali created
+clusterrole.rbac.authorization.k8s.io/kiali-viewer created
+clusterrole.rbac.authorization.k8s.io/kiali created
+clusterrolebinding.rbac.authorization.k8s.io/kiali created
+role.rbac.authorization.k8s.io/kiali-controlplane created
+rolebinding.rbac.authorization.k8s.io/kiali-controlplane created
+service/kiali created
+deployment.apps/kiali created
+serviceaccount/prometheus created
+configmap/prometheus created
+clusterrole.rbac.authorization.k8s.io/prometheus created
+clusterrolebinding.rbac.authorization.k8s.io/prometheus created
+service/prometheus created
+deployment.apps/prometheus created
+```
+
+![](_img_/12.png)
+
+
+```
+MSI GAMING@MSI MINGW64 /d/tugas3.1/istio-1.17.1$ kubectl rollout status deployment/kiali -n istio-system
+Waiting for deployment "kiali" rollout to finish: 0 of 1 updated replicas are available...
+deployment "kiali" successfully rolled out
+```
+
+![](_img_/13.png)
+
+
+```
+MSI GAMING@MSI MINGW64 /d/tugas3.1/istio-1.17.1$ istioctl dashboard kiali
+http://localhost:20001/kiali
+```
+![](_img_/14.png)
+
 ## Langkah 19: Untuk menguji coba order-service
 
 ```
@@ -666,6 +715,8 @@ done
 ![](_img_/4.png)
 
 ![](_img_/5.png)
+
+![](_img_/11.png)
 
 ```
 MSI GAMING@MSI MINGW64 /d/tugas3/kubernetes/order-service$ kubectl logs $(kubectl get pods -l app=order-service -o jsonpath="{.items[0].metadata.name}")
