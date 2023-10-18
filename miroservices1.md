@@ -210,4 +210,4 @@ docker compose logs > log.txt
 ```
 Periksa aplikasi dengan mengunjungi http://localhost:80 di browser web.
 
-![](Screenshot 2023-10-18 191112.png)
+![](img1.png)
